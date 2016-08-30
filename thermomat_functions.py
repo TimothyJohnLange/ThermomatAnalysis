@@ -1,13 +1,13 @@
 def cond_model(p, time):
     theta = p['theta'].value
     tau = p['tau'].value
-    K = p['K'].value
+    beta = p['beta'].value
    
     model = []
 
     for t in time:
         alpha = 1 - 1/(1 + (t/tau)**theta) 
-        cond = K*alpha
+        cond = beta*alpha
         model.append(cond)
         
     return model
@@ -35,11 +35,11 @@ def find_cut_point(conduct_data):
     return cut
 
 def rand_ini_val(up_limits):
-    theta_lim, tau_lim, K_lim = up_limits
+    theta_lim, tau_lim, beta_lim = up_limits
     from random import random
     limits = [[1.0, theta_lim],
               [1.0, tau_lim],
-              [1.0, K_lim]]
+              [1.0, beta_lim]]
 			  
     ini_val = []
     for l in range(len(limits)):
@@ -54,12 +54,12 @@ def parameters(ini_val, up_limits):
     from lmfit import Parameters
     p = Parameters()
     
-    theta, tau, K = ini_val
-    theta_lim, tau_lim, K_lim = up_limits
+    theta, tau, beta = ini_val
+    theta_lim, tau_lim, beta_lim = up_limits
     
     #              Name, Value, Vary,  Min, Max)
     p.add_many(('theta', theta, True,  1.0, theta_lim),
                (  'tau',   tau, True,  1.0, tau_lim),
-               (    'K',     K, True,  1.0, K_lim)) 
+               ( 'beta',  beta, True,  1.0, beta_lim)) 
     
     return p
