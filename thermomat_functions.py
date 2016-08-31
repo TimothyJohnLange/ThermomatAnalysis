@@ -1,3 +1,5 @@
+from numpy import log
+
 def cond_model(p, time):
     theta = p['theta'].value
     tau = p['tau'].value
@@ -6,8 +8,9 @@ def cond_model(p, time):
     model = []
 
     for t in time:
-        alpha = 1 - 1/(1 + (t/tau)**theta) 
-        cond = beta*alpha
+        # F_t = 1 - 1/(1 + (t/tau)**theta)
+        F_t = log(1 + (t/tau)**theta)
+        cond = beta*F_t
         model.append(cond)
         
     return model
